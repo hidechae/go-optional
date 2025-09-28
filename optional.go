@@ -1,5 +1,9 @@
 package optional
 
+import "errors"
+
+var ErrGetValueFromNone = errors.New("get value from none")
+
 type Option[T any] struct {
 	value *T
 }
@@ -30,11 +34,20 @@ func (o Option[T]) IsNone() bool {
 	return o.value == nil
 }
 
-func (o Option[T]) GetOr(fallback T) T {
-	if o.value != nil {
-		return *o.value
+func (o Option[T]) Get() (T, error) {
+	if o.IsNone() {
+		var defaultValue T
+		return defaultValue, ErrGetValueFromNone
 	} else {
+		return *o.value, nil
+	}
+}
+
+func (o Option[T]) GetOr(fallback T) T {
+	if o.IsNone() {
 		return fallback
+	} else {
+		return *o.value
 	}
 }
 

@@ -51,6 +51,12 @@ if opt.IsNone() {
 ```go
 opt := optional.Some(42)
 
+// Get value with error handling
+value, err := opt.Get()
+if err != nil {
+    // Handle error (returns optional.ErrGetValueFromNone if None)
+}
+
 // Get value with fallback
 value := opt.GetOr(0) // Returns 42, or 0 if None
 
@@ -64,6 +70,10 @@ ptr := opt.ToPtr()
 
 - `Option[T any]` - Generic optional type that can hold any type T
 
+### Variables
+
+- `ErrGetValueFromNone` - Error returned when trying to get value from None
+
 ### Functions
 
 - `Some[T any](v T) Option[T]` - Create an Option containing the given value
@@ -74,6 +84,7 @@ ptr := opt.ToPtr()
 
 - `IsSone() bool` - Returns true if the Option contains a value
 - `IsNone() bool` - Returns true if the Option is empty
+- `Get() (T, error)` - Returns the contained value or an error if None
 - `GetOr(fallback T) T` - Returns the contained value or the fallback if None
 - `ToPtr() *T` - Returns a pointer to the contained value or nil if None
 
