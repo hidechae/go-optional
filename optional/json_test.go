@@ -10,10 +10,10 @@ import (
 
 func TestOption_UnmarshalJSON(t *testing.T) {
 	type R struct {
-		Val1 Option[int]
-		Val2 Option[string]
-		Val3 Option[float64]
-		Val4 Option[int]
+		Val1 Option[int]     `json:"val1"`
+		Val2 Option[string]  `json:"val2"`
+		Val3 Option[float64] `json:"val3"`
+		Val4 Option[int]     `json:"val4"`
 	}
 	type args struct {
 		data []byte
@@ -44,6 +44,36 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 				Val4: None[int](),
 			},
 			wantErr: false,
+		},
+		{
+			name: "unmarshal omitted json",
+			args: args{
+				data: []byte(`
+{
+	"val1": 1,
+	"val2": "hello",
+	"val3": 3.14
+}
+`),
+			},
+			want: R{
+				Val1: Some(1),
+				Val2: Some("hello"),
+				Val3: Some(3.14),
+				Val4: None[int](),
+			},
+			wantErr: false,
+		},
+		{
+			name: "unmarshal invalid type",
+			args: args{
+				data: []byte(`
+{
+	"val1": "1"
+}`),
+			},
+			want:    R{},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
