@@ -21,7 +21,7 @@ go get github.com/hidechae/go-optional
 ```go
 package main
 
-import "github.com/hidechae/go-optional"
+import "github.com/hidechae/go-optional/optional"
 
 // Create an Option with a value
 opt1 := optional.Some(42)
@@ -93,10 +93,12 @@ result := optional.Map(noneOpt, func(x int) int {
 The Option type supports JSON marshalling and unmarshalling. `Some` values are marshalled as the contained value, while `None` values are marshalled as `null`.
 
 ```go
+import "github.com/hidechae/go-optional/optional"
+
 type User struct {
-    Name  string         `json:"name"`
-    Email Option[string] `json:"email"`
-    Age   Option[int]    `json:"age"`
+    Name  string                `json:"name"`
+    Email optional.Option[string] `json:"email"`
+    Age   optional.Option[int]    `json:"age"`
 }
 
 user := User{
@@ -128,7 +130,7 @@ The JSON marshalling also works with the `omitzero` tag to omit `None` values fr
 
 ```go
 type Config struct {
-    Debug Option[bool] `json:"debug,omitzero"`
+    Debug optional.Option[bool] `json:"debug,omitzero"`
 }
 
 config := Config{Debug: optional.None[bool]()}
@@ -164,7 +166,7 @@ data, _ := json.Marshal(config)
 ## Running Tests
 
 ```bash
-go test
+go test ./optional
 ```
 
 ## License
