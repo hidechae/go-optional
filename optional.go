@@ -37,6 +37,10 @@ func (o Option[T]) IsNone() bool {
 	return o.value == nil
 }
 
+func (o Option[T]) IsZero() bool {
+	return o.IsNone()
+}
+
 func (o Option[T]) Get() (T, error) {
 	if o.IsNone() {
 		var defaultValue T
