@@ -64,6 +64,28 @@ value := opt.GetOr(0) // Returns 42, or 0 if None
 ptr := opt.ToPtr()
 ```
 
+### Functional Operations
+
+```go
+opt := optional.Some(42)
+
+// Map: Transform the value if present
+doubled := optional.Map(opt, func(x int) int {
+    return x * 2
+}) // Some(84)
+
+// Map with type conversion
+str := optional.Map(opt, func(x int) string {
+    return fmt.Sprintf("Value: %d", x)
+}) // Some("Value: 42")
+
+// Map on None returns None
+noneOpt := optional.None[int]()
+result := optional.Map(noneOpt, func(x int) int {
+    return x * 2
+}) // None
+```
+
 ## API Reference
 
 ### Types
@@ -79,6 +101,7 @@ ptr := opt.ToPtr()
 - `Some[T any](v T) Option[T]` - Create an Option containing the given value
 - `None[T any]() Option[T]` - Create an empty Option
 - `FromPtr[T any](v *T) Option[T]` - Create an Option from a pointer (nil becomes None)
+- `Map[T, V any](o Option[T], f func(T) V) Option[V]` - Transform the value if present
 
 ### Methods
 
