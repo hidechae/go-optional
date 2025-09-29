@@ -1,3 +1,5 @@
+[![Test](https://github.com/hidechae/go-optional/actions/workflows/test.yml/badge.svg)](https://github.com/hidechae/go-optional/actions/workflows/test.yml)
+
 # go-optional
 
 A Go library providing an optional type for handling nullable values in a type-safe way.
