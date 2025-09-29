@@ -88,6 +88,54 @@ result := optional.Map(noneOpt, func(x int) int {
 }) // None
 ```
 
+### JSON Marshalling/Unmarshalling
+
+The Option type supports JSON marshalling and unmarshalling. `Some` values are marshalled as the contained value, while `None` values are marshalled as `null`.
+
+```go
+type User struct {
+    Name  string         `json:"name"`
+    Email Option[string] `json:"email"`
+    Age   Option[int]    `json:"age"`
+}
+
+user := User{
+    Name:  "Alice",
+    Email: optional.Some("alice@example.com"),
+    Age:   optional.None[int](),
+}
+
+// Marshal to JSON
+data, err := json.Marshal(user)
+// Result: {"name":"Alice","email":"alice@example.com","age":null}
+
+// Unmarshal from JSON
+jsonData := `{"name":"Bob","email":"bob@example.com","age":30}`
+var newUser User
+err = json.Unmarshal([]byte(jsonData), &newUser)
+// newUser.Email will be Some("bob@example.com")
+// newUser.Age will be Some(30)
+
+// Null values become None
+jsonData2 := `{"name":"Charlie","email":null,"age":null}`
+var user2 User
+err = json.Unmarshal([]byte(jsonData2), &user2)
+// user2.Email will be None[string]()
+// user2.Age will be None[int]()
+```
+
+The JSON marshalling also works with the `omitzero` tag to omit `None` values from JSON output:
+
+```go
+type Config struct {
+    Debug Option[bool] `json:"debug,omitzero"`
+}
+
+config := Config{Debug: optional.None[bool]()}
+data, _ := json.Marshal(config)
+// Result: {} (empty object, debug field omitted)
+```
+
 ## API Reference
 
 ### Types
